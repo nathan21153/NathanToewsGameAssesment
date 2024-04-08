@@ -2,26 +2,29 @@
 #-------
 import time
 import random
-import string
 #variables
 #---------
 t=0 #used for timing on the countdowns
-ts=0 #used for timing on time.sleep so I can easily skip timings to debug quicker (by setting t and ts to 0)
+ts=0 #(use variable as 1 for submission)used for timing on time.sleep so I can easily skip timings to debug quicker (by setting t and ts to 0)
 #lists and hashes
 #----------------
 
 crafting_station=[
-    {"item":"knife", "status":"uncrafted", "craft requirments": {"nickle": 5, "silver": 2}},#knife info index 0
-    {"item":"blast charge", "status":"uncrafted", "craft requirments": {"sulphur": 4, "boomstone": 2}},#blast charg infe index 1
-    {"item":"laser cutter", "status":"unrepaired", "craft requirments": {"boomstone": 1, "silver": 2, "lumen stone": 5}},#laser cutter info index 2
-    {"item":"bio-flashlight", "status":"uncrafted", "craft requirments": {"lumenstone": 2, "silver": 2}},#bio flashlight info index 3
+    {"item":"knife", "crafted": False, "craft requirments": {"nickle": 3, "silver": 2}, "can craft":False},# "choose_num":1},#knife info index 0
+    {"item":"blast charge", "crafted": False, "craft requirments": {"sulphur": 4, "boomstone": 2}, "can craft":False},# "choose_num":2},#blast charg infe index 1
+    {"item":"laser cutter", "crafted": False, "craft requirments": {"boomstone": 1, "silver": 2, "lumenstone": 5}, "can craft":False},# "choose_num":3},#laser cutter info index 2
+    {"item":"bio-flashlight", "crafted": False, "craft requirments": {"lumenstone": 2, "silver": 2}, "can craft":False}# "choose_num":4},#bio flashlight info index 3
 ]
-mineral_bag=[
-    {"mineral":"nickle", "quantity": 0},#index 0
-    {"mineral":"silver", "quantity": 0},#index 1
-    {"mineral":"sulphur", "quantity": 0},#index 2
-    {"mineral":"boomstone", "quantity": 0},#index 3
-    {"mineral":"lumenstone", "quantity": 0},#index 4
+mineral_bag={
+    "nickle": 9,
+    "silver": 9,
+    "sulphur": 9,
+    "boomstone": 9,
+    "lumenstone": 9,
+}
+
+craftable_list=[
+    
 ]
 #functions
 #---------
@@ -151,7 +154,6 @@ type desierd option or input corresponding number:
             fire_damage+=1
             if fire_damage == 3:
                 print("you failed to put out the fires twice")
-                print("game restarting...")
                 restart(t)
                 break
         
@@ -191,6 +193,9 @@ type desierd option or input corresponding number:
     print("you pick up your mineral bag and empty tool pack")
     print("your mineral bag can be accsessed at any time by pressing [8]")
     start_pod(1)
+
+
+
 #places acssesable to player (in order of game porgression):
 def start_pod(x): #starting place you land/begin
     print("""
@@ -216,17 +221,39 @@ type desierd option or input corresponding number:
             """)
             continue
         if option == 1:
+            craft_loop = True
             #crafting station
-            while True:
+            while craft_loop:
                 option=0
+                i=1
+                for craftable_item in crafting_station:
+                    num_req_met=0
+                    for mineral_req, quantity_req in craftable_item["craft requirments"].items():
+                        if mineral_bag[mineral_req] >= quantity_req:
+                            num_req_met += 1
+                            if num_req_met == len(craftable_item["craft requirments"]):
+                                craftable_item["can craft"] = True
+                                # if not craftable_item in craftable_list:
+                                #     craftable_list.append(craftable_item)
+                            else:
+                                craftable_item["can craft"] = False
+                                # if craftable_item in craftable_list:
+                                #     craftable_list.remove(craftable_item)
+                print("")
                 print("your mineral bag:")
-                for mineral in mineral_bag:
-                    print(f"{mineral['mineral']}: {mineral['quantity']}")
+                for mineral, amount in mineral_bag.items():
+                    print(f"{mineral}: {amount}")
+                print("")
+                print("")
                 print("avalible tools for crafting:")
                 for tool in crafting_station:
-                    print(f"{tool['item']}, {tool['status']}, requirment: {tool['craft requirments']}","[", i, "]",sep=(''))
+                    print(f"[{i}] {tool['item']}, crafting requirments: {tool['craft requirments']}, crafted: {tool['crafted']}")
+                    print("")
                     i+=1
+                print("go back [0]")
+                print("restart [9]")
                 print("what would you like to craft?")
+                print("")
                 try:
                     option=int(input())
                 except ValueError:
@@ -234,17 +261,54 @@ type desierd option or input corresponding number:
 INPUT ERROR!! Please try again
 type desierd option or input corresponding number:
 """)
-                continue
-            #----------------
+                    continue
+                if 0 < option <len(crafting_station)+1:
+                    if crafting_station[option-1]["can craft"]:
+                        crafting_station[option-1]["crafted"]=True
+
+                        for which_mineral, remove_amount in crafting_station[option-1]["craft requirments"].items():
+                            for which_mineral_in_bag, amount_in_bag in mineral_bag.items():
+                                if which_mineral == which_mineral_in_bag:
+                                    amount_in_bag = amount_in_bag - remove_amount
+                                    mineral_bag[which_mineral_in_bag] = amount_in_bag
+                    # for item_choice_check in craftable_list:
+                    #     if option == item_choice_check["choose_num"]:
+                    #         for tools_replace in crafting_station:
+                    #             if tools_replace["crafted"] == False:
+                    #                 if item_choice_check["choose_num"] == tools_replace["choose_num"]:
+                    #                     print("item crafted")
+                    #                     print("")
+                    #                     item_choice_check["crafted"]=True
+                    #                     tools_replace=item_choice_check
+                    #                     craftable_list.remove(item_choice_check)
+                    #                     for which_mineral, remove_amount in tools_replace["craft requirments"].items():
+                    #                         for which_mineral_in_bag, amount_in_bag in mineral_bag.items():
+                    #                             if which_mineral == which_mineral_in_bag:
+                    #                                 amount_in_bag = amount_in_bag - remove_amount
+                    #                                 mineral_bag[which_mineral_in_bag] = amount_in_bag
+                    #             else:
+                    #                 print("you have already crafted this")
+                    #     else:
+                    #         print("you cannot craft this")
+                    #         continue
+                elif option == 0:
+                    craft_loop = False
+                elif option == 9:
+                    restart(t)
+                    break
+                else:
+                    print("""
+INPUT ERROR!! Please try again
+type desierd option or input corresponding number:
+""")
+                #----------
+
         elif option == 2:
             print("")
         elif option == 8:
-            for mineral in mineral_bag:
-                print(f"{mineral['mineral']}: {mineral['quantity']}")
-                #for mineral in mineral_bag loops through every index in mineral bag
-                #f is used to format the print, everything within the curly brackets is code
-                #{mineral[ loops each time with the following index starting from mineral_bag[0]
-                #'mineral' prints what value sored in mineral: in the mineral_bag hash in order of indexs, same with 'quantity'
+            print("Your mineral bag:")
+            for mineral, amount in mineral_bag.items():
+                print(f"{mineral}: {amount}")
         elif option == 9:
             restart(3)
             break
@@ -253,9 +317,14 @@ type desierd option or input corresponding number:
 INPUT ERROR!! Please try again
 type desierd option or input corresponding number:
         """)
-            
+
 
 def caves_west(): #caves west of starting pod
+    #for mineral in mineral_bag loops through every index in mineral bag
+    #f is used to format the print, everything within the curly brackets is code
+    #{mineral[ loops each time with the following index starting from mineral_bag[0]
+    #the index it print is mineral_bag[mineral] where mineral is just a number
+    #'mineral' prints what value sored in mineral: in the mineral_bag hash in order of indexs, same with 'quantity'
     print("placeholder")
 def heat_vents_east(): #vents east of starting pod
     print("placeholder")
@@ -264,7 +333,7 @@ def crashed_ship_North(): #crashed ship north of starting pod
 def ghost_river_south(): #"cavern of unknown proproties" later to be found as ghost river south of starting pod
     print("placeholder")
 def glowing_cavern(): #south-east from start ponit, only acsessable from ghost river
-    print("placeholder")  
+    print("placeholder")
 #main routine
 #------------
 start_menu()
