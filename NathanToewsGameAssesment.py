@@ -8,9 +8,9 @@ import random
 LUMENSTONE = "lumenstone"
 BOOMSTONE = "boomstone"
 SULPHUR = "sulphur"
-CAN_CRAFT = "can craft"
 SILVER = "silver"
 NICKLE = "nickle"
+CAN_CRAFT = "can craft"
 CRAFT_REQUIREMENTS = "craft_requirements"
 CRAFTED = "crafted"
 ITEM = "item"
@@ -36,7 +36,10 @@ crafting_station = [
     {ITEM: "laser_cutter", CRAFTED: False, CRAFT_REQUIREMENTS: {BOOMSTONE: 1, SILVER: 2, LUMENSTONE: 5}, CAN_CRAFT: False},  # laser_cutter info index 2
 
     {ITEM: "bio_flashlight", CRAFTED: False, CRAFT_REQUIREMENTS: {LUMENSTONE: 2, SILVER: 2}, CAN_CRAFT: False},  # bio flashlight info index 3
+
+    {ITEM: "rock processor", CRAFTED: False, CRAFT_REQUIREMENTS: {NICKLE: 2, SILVER: 1}, CAN_CRAFT: False}, # rock processor index 4
 ]
+
 
 mineral_bag = {
     NICKLE: 0,
@@ -49,7 +52,7 @@ mineral_bag = {
 
 # functions
 # ---------
-def restart(restart_time_in_seconds):  # restarts all variable to starting values and re-runs from beginning
+def restart(restart_time_in_seconds):  # restarts all variables to starting values and re-runs from beginning
     global ship_accessible
     ship_accessible = False
     print("restarting...")
@@ -479,16 +482,25 @@ you go up to a tunnel upon close inspection you see a suspicious rock in the tun
 """)
             continue
         if option == 1:
-            harvest = random.randint(1, 3)
-            if harvest == 1:
-                mineral_bag[NICKLE] += 1
-                print("you got some nickel")
-            elif harvest == 2:
-                mineral_bag[SILVER] += 1
-                print("you got some silver")
-            elif harvest == 3:
-                print("you got nothing")
-            continue
+            if not crafting_station[4][CRAFTED]: # checks if you made the rock_processor
+                harvest = random.randint(1, 3)
+                if harvest == 1:
+                    mineral_bag[NICKLE] += 1
+                    print("you got some nickel")
+                elif harvest == 2:
+                    mineral_bag[SILVER] += 1
+                    print("you got some silver")
+                elif harvest == 3:
+                    print("you got nothing")
+                    
+            elif crafting_station[4][CRAFTED]: # checks if you made the rock_processor
+                harvest = random.randint(1, 2)
+                if harvest == 1:
+                    mineral_bag[NICKLE] += 1
+                    print("you got some nickel")
+                elif harvest == 2:
+                    mineral_bag[SILVER] += 1
+                    print("you got some silver")
 
         elif option == 2:
             print("returning")
@@ -536,7 +548,7 @@ you go up to a heat vent and upon close inspection you see a the hot rock need a
 """)
             continue
         if option == 1:
-            if crafting_station[0][CRAFTED]:
+            if not crafting_station[4][CRAFTED]:  # checks if you made the rock_processor
                 harvest = random.randint(1, 3)
                 if harvest == 1:
                     mineral_bag[SULPHUR] += 1
@@ -546,9 +558,16 @@ you go up to a heat vent and upon close inspection you see a the hot rock need a
                     print("you got some boomstone")
                 elif harvest == 3:
                     print("you got nothing")
-            else:
-                print("you require a knife to open this")
-            continue
+                continue
+            elif crafting_station[4][CRAFTED]: # checks if you made the rock_processor
+                harvest = random.randint(1, 2)
+                if harvest == 1:
+                    mineral_bag[SULPHUR] += 1
+                    print("you got some sulphur")
+                elif harvest == 2:
+                    mineral_bag[BOOMSTONE] += 1
+                    print("you got some boomstone")
+                continue
 
         elif option == 2:
             print("returning")
@@ -574,28 +593,24 @@ you go up to a heat vent and upon close inspection you see a the hot rock need a
 """)
 
 
-def crashed_ship_north(x):  # crashed ship north of starting pod--------------------------------
+def crashed_ship_north():  # crashed ship north of starting pod--------------------------------
     global ship_accessible
     ship_loop = True
+    print("you swim up to the large metal ship")
+    time.sleep(print_delay_time * 1.5)
 
-    if x == 1:
-        print("you swim up to the large metal ship")
-        time.sleep(print_delay_time * 1.5)
-    elif x == 2:
-        pass
     if not ship_accessible:
         print("you swim to the ship's only doors,")
         print("these doors are broken and too heavy to slide open")
         time.sleep(print_delay_time * 1.5)
-        if not crafting_station[1][CRAFTED]:
+        if not crafting_station[1][CRAFTED]: # checks if you have item to accsess ship
             print("you will need to craft a blast_charge to open them")
             print("you swim back to your ship")
             time.sleep(print_delay_time * 2)
             start_pod()
-        elif crafting_station[1][CRAFTED]:
+        elif crafting_station[1][CRAFTED]: # checks if you have item to accsess ship
             print("you use your blast_charge to blow open the doors")
             ship_accessible = True
-            crashed_ship_north(2)
     elif ship_accessible:
         print("you swim into the ship")
     # in the ship
@@ -620,13 +635,17 @@ stuck to the walls
 """)
             continue
         if option == 1:
-            harvest = random.randint(1, 2)
-            if harvest == 1:
+            if not crafting_station[1][CRAFTED]: # checks if you made the rock_processor
+                harvest = random.randint(1, 2)
+                if harvest == 1:
+                    mineral_bag[LUMENSTONE] += 1
+                    print("you got lumenstone")
+                elif harvest == 2:
+                    print("the glow disperse after you grab it")
+                    print("you got nothing")
+            elif crafting_station[1][CRAFTED]: # checks if you made the rock_processor
                 mineral_bag[LUMENSTONE] += 1
-                print("you got some lumenstone")
-            elif harvest == 2:
-                print("the glow dispersal after you grab it")
-                print("you got nothing")
+                print("you got lumenstone")
 
         elif option == 2:
             print("returning")
