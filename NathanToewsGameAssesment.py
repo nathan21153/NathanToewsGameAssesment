@@ -18,8 +18,8 @@ WEST = 1
 EAST = 2
 NORTH = 3
 SOUTH = 4
-COUNT_DOWN_TIMER = 0  # (us variable as 3 for submission)used for timing on the countdowns
-PRINT_DELAY_TIME = 0  # (use variable as 1 for submission) used for timing on time.sleep, so I can easily skip timings to debug quicker (by setting both of the timing vars to 0)
+COUNT_DOWN_TIMER = 3  # (us variable as 3 for submission)used for timing on the countdowns
+PRINT_DELAY_TIME = 1  # (use variable as 1 for submission) used for timing on time.sleep, so I can easily skip timings to debug quicker (by setting both of the timing vars to 0)
 
 # variables
 # ---------
