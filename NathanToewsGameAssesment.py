@@ -18,8 +18,8 @@ WEST = 1
 EAST = 2
 NORTH = 3
 SOUTH = 4
-COUNT_DOWN_TIMER = 1  # used for timing on the countdowns
-PRINT_DELAY_TIME = 1  # (use variable as 1 for submission) used for timing on time.sleep, so I can easily skip timings to debug quicker (by setting both of the timing vars to 0)
+COUNT_DOWN_TIMER = 0  # (us variable as 3 for submission)used for timing on the countdowns
+PRINT_DELAY_TIME = 0  # (use variable as 1 for submission) used for timing on time.sleep, so I can easily skip timings to debug quicker (by setting both of the timing vars to 0)
 
 # variables
 # ---------
@@ -105,7 +105,6 @@ go to different locations to harvest materials from
 
         try:
             option = int(input())
-
         except ValueError:  # check for wrong input
             print_error()
 
@@ -113,10 +112,8 @@ go to different locations to harvest materials from
         if option == 1:
             start_menu_loop = False
             start_sequence()  # runs start of game
-
         elif option == 2:  # quits
             quit()
-
         else:  # checks for number outside of options goes back to the start_menu_loop if it is
             print_error()
 
@@ -170,7 +167,6 @@ You can access the fire extinguisher.
             time.sleep(PRINT_DELAY_TIME * 4)
             fire_damage += 1
             start_sequence_loop1 = False
-
         elif option == 2:
             print("""
 you lower the bucket down through a hatch in the
@@ -202,7 +198,6 @@ You can access the fire extinguisher.
         if option == 1:
             print("you successfully put out all fires")
             start_sequence_loop2 = False
-
         elif option == 2:  # if you get 2nd option wrong checks if you got both wrong and restarts
             # otherwise continue game
             print("the water fails to put out the fires")
@@ -212,7 +207,6 @@ You can access the fire extinguisher.
                 print("you failed to put out the fires twice")
                 restart(COUNT_DOWN_TIMER)
                 start_sequence_loop2 = False
-
             else:
                 print("""
 the water fails too put out the fires
@@ -221,11 +215,9 @@ but you manage to get the fire extinguisher
 in time and put the fire out
                 """)
                 start_sequence_loop2 = False
-
         elif option == 9:
             start_sequence_loop2 = False
             restart(COUNT_DOWN_TIMER)
-
         else:
             print_error()
     time.sleep(PRINT_DELAY_TIME * 2)
@@ -264,6 +256,7 @@ life support systems: operational
 utility functionality: online
 atmosphere: sustainable
     """)
+
     while pod_loop:
         plan_travel_loop = True
         craft_loop = True
@@ -274,6 +267,7 @@ what operation would you like to access:
 [8] mineral bag
 [9] restart game
 """)
+
         try:  # what pod operation you accesses
             option = int(input())
         except ValueError:
@@ -341,26 +335,22 @@ what operation would you like to access:
                         print("you dont have the required minerals to craft this")
                 elif option == 0:
                     craft_loop = False
-
                 elif option == 9:
                     craft_loop = False
                     pod_loop = False
                     restart(COUNT_DOWN_TIMER)
-
                 else:  # tells user they did not select a valid option
                     print_error()
         # -----------------------------------------------------------------------------------------------
-
-        # plan travel:                    
-
+        # plan travel:
         elif option == 2:
             while plan_travel_loop:
                 print("""
 where would you like to go:
-[1] caves-west
-[2] heat_vents-east
-[3] crashed star ship-north
-[4] cavern of unknown properties-south
+[1] caves (west)
+[2] heat vents (east)
+[3] crashed star ship (north)
+[4] cavern of unknown properties (south)
 [8] mineral bag
 [9] restart game
 [0] go back
@@ -368,7 +358,6 @@ where would you like to go:
 
                 try:
                     option = int(input())
-
                 except ValueError:
                     print_error()
                     continue
@@ -376,41 +365,31 @@ where would you like to go:
                 if option == 1:
                     travel_sequence(1)  # sends value to travel sequence, so it know where to take you
                     # function used to reduce repeated code in options
-
                 elif option == 2:
                     travel_sequence(2)
-
                 elif option == 3:
                     travel_sequence(3)
-
                 elif option == 4:
                     travel_sequence(4)
-
                 elif option == 8:
                     for bag_mineral, amount in mineral_bag.items():
                         print(f"{bag_mineral}: {amount}")
-
                 elif option == 9:
                     restart(COUNT_DOWN_TIMER)
                     pod_loop = False
                     plan_travel_loop = False
-
                 elif option == 0:
                     plan_travel_loop = False
-
                 else:
                     print_error()
         # --------------------------------------------------------------------
-
         elif option == 8:  # mineral_bag print
             print("Your mineral bag:")
             for bag_mineral, amount in mineral_bag.items():
                 print(f"{bag_mineral}: {amount}")
-
         elif option == 9:
             restart(3)
             pod_loop = False
-
         else:
             print_error()
 
@@ -448,10 +427,10 @@ you go up to a tunnel upon close inspection you see a suspicious rock in the tun
 """)
         try:
             option = int(input())
-
         except ValueError:
             print_error()
             continue
+
         if option == 1:
             if not crafting_station[4][CRAFTED]:  # checks if you made the rock_processor by going into the list and check the values in the dict for index 4 which is th rock processor
                 harvest_chance = random.randint(1, 3)  # generates a random number tha changes the output of what you get
@@ -463,7 +442,6 @@ you go up to a tunnel upon close inspection you see a suspicious rock in the tun
                     print("you got some silver")  # adds one silver to the mineral bag
                 elif harvest_chance == 3:  # tells user they got nothing
                     print("you got nothing")
-                    
             elif crafting_station[4][CRAFTED]:   # checks if you made the rock_processor
                 harvest_chance = random.randint(1, 2)
                 if harvest_chance == 1:
@@ -472,7 +450,6 @@ you go up to a tunnel upon close inspection you see a suspicious rock in the tun
                 elif harvest_chance == 2:
                     mineral_bag[SILVER] += 1
                     print("you got some silver")
-
         elif option == 2:
             print("returning")
             for i in range(0, COUNT_DOWN_TIMER):
@@ -480,16 +457,13 @@ you go up to a tunnel upon close inspection you see a suspicious rock in the tun
                 time.sleep(PRINT_DELAY_TIME)
             caves_loop = False
             start_pod()
-
         elif option == 8:
             for bag_mineral, amount in mineral_bag.items():
                 print(f"{bag_mineral}: {amount}")
             continue
-
         elif option == 9:
             caves_loop = False
             restart(COUNT_DOWN_TIMER)
-
         else:
             print_error()
 
@@ -508,10 +482,10 @@ you go up to a heat vent and upon close inspection you see a the hot rock need a
 """)
         try:
             option = int(input())
-
         except ValueError:
             print_error()
             continue
+
         if option == 1:
             if not crafting_station[4][CRAFTED]:  # checks if you made the rock_processor if not asks whether the following argument is true or false
                 harvest_chance = random.randint(1, 3)
@@ -533,7 +507,6 @@ you go up to a heat vent and upon close inspection you see a the hot rock need a
                     mineral_bag[BOOMSTONE] += 1
                     print("you got some boomstone")
                 continue
-
         elif option == 2:
             print("returning")
             for i in range(0, COUNT_DOWN_TIMER):
@@ -541,22 +514,19 @@ you go up to a heat vent and upon close inspection you see a the hot rock need a
                 time.sleep(PRINT_DELAY_TIME)
             heat_vents_loop = False
             start_pod()
-
         elif option == 8:
             for bag_mineral, amount in mineral_bag.items():
                 print(f"{bag_mineral}: {amount}")
             continue
-
         elif option == 9:
             heat_vents_loop = False
             restart(COUNT_DOWN_TIMER)
-
         else:
             print_error()
 
 
 def crashed_ship_north():  # crashed ship north of starting pod--------------------------------
-    global ship_accessible  # calls argument "ship_accessible" into this function
+    global ship_accessible  # calls variable "ship_accessible" into this function
     ship_loop = True
     print("you swim up to the large metal ship")
     time.sleep(PRINT_DELAY_TIME * 1.5)
@@ -578,6 +548,7 @@ def crashed_ship_north():  # crashed ship north of starting pod-----------------
     # in the ship
     print("as you go into the ship you dim headlight flickers on,")
     time.sleep(PRINT_DELAY_TIME * 1.5)
+
     while ship_loop:
         print("""
 you take a look around and see a bright glowing substance
@@ -589,10 +560,10 @@ stuck to the walls
 """)
         try:
             option = int(input())
-
         except ValueError:
             print_error()
             continue
+
         if option == 1:
             if not crafting_station[1][CRAFTED]:  # checks if you made the rock_processor
                 harvest_chance = random.randint(1, 2)
@@ -605,7 +576,6 @@ stuck to the walls
             elif crafting_station[1][CRAFTED]:  # checks if you made the rock_processor
                 mineral_bag[LUMENSTONE] += 1
                 print("you got lumenstone")
-
         elif option == 2:
             print("returning")
             for i in range(0, COUNT_DOWN_TIMER):
@@ -613,16 +583,13 @@ stuck to the walls
                 time.sleep(PRINT_DELAY_TIME)
             ship_loop = False
             start_pod()
-
         elif option == 8:
             for bag_mineral, amount in mineral_bag.items():
                 print(f"{bag_mineral}: {amount}")
             continue
-
         elif option == 9:
             restart(COUNT_DOWN_TIMER)
             break
-
         else:
             print_error()
 
@@ -630,6 +597,7 @@ stuck to the walls
 def ghost_river_south():  # "cavern of unknown properties" later to be found as ghost river south of starting pod--------------------------------
     print("you swim down into a large cavern")
     time.sleep(PRINT_DELAY_TIME * 1.5)
+
     if not crafting_station[3][CRAFTED]:  # checks if you have the flashlight, it does this by accessing the list and checking whether you have crafted the item
         print("its far too dark to see anything")
         print("you proceed to swim back to pod")
@@ -680,17 +648,14 @@ END OF SUBNAUTICA BELOW GRAPHICS
 """)
         try:
             option = int(input())
-
         except ValueError:
             print_error()
 
         if option == 1:
             glowing_cavern_loop = False
             restart(COUNT_DOWN_TIMER)
-
         elif option == 2:
             quit()
-
         else:
             print_error()
 
