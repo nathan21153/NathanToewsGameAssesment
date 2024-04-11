@@ -18,11 +18,11 @@ WEST = 1
 EAST = 2
 NORTH = 3
 SOUTH = 4
+COUNT_DOWN_TIMER = 1  # used for timing on the countdowns
+PRINT_DELAY_TIME = 1  # (use variable as 1 for submission) used for timing on time.sleep, so I can easily skip timings to debug quicker (by setting both of the timing vars to 0)
 
 # variables
 # ---------
-COUNT_DOWN_TIMER = 3  # used for timing on the countdowns
-PRINT_DELAY_TIME = 1  # (use variable as 1 for submission)used for timing on time.sleep, so I can easily skip timings to debug quicker (by setting t and ts to 0)
 ship_accessible = False
 
 # lists and hashes
@@ -70,6 +70,13 @@ def restart(restart_time_in_seconds):  # restarts all variables to starting valu
     start_menu()
 
 
+def print_error():
+    print("""
+    INPUT ERROR!! Please try again
+    type desired option or input corresponding number:
+""")
+
+
 def start_menu():  # starting menu
     start_menu_loop = True
     print("""
@@ -85,9 +92,9 @@ number in the square brackets ([]) next to that option
 your goal is to get to the unknown cavern with the proper
 tools to complete the game and cure your infection
 
-you will need to craft tools be able to
-get new materials to craft more tools
-until ultimatly you can access the unknown cavern
+go to different locations to harvest materials from 
+'plan location', then you will be able to craft tools
+ use these to go to the other locations until you finish the game
 
 """)
 
@@ -100,10 +107,7 @@ until ultimatly you can access the unknown cavern
             option = int(input())
 
         except ValueError:  # check for wrong input
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
 
             continue  # goes back to top of loop
         if option == 1:
@@ -114,10 +118,7 @@ until ultimatly you can access the unknown cavern
             quit()
 
         else:  # checks for number outside of options goes back to the start_menu_loop if it is
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
 
 
 def start_sequence():  # intro to game
@@ -147,16 +148,14 @@ def start_sequence():  # intro to game
         print("the fire on the wall is preventing you from accessing the extinguisher so for water you go grab the...")
         time.sleep(PRINT_DELAY_TIME * 3)
         print("""
-[1] large trash can, [2] bucket
+[1] large trash can
+[2] bucket
 [9] restart game
 """)
         try:
             option = int(input())
         except ValueError:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
             continue
 
         if option == 1:
@@ -166,7 +165,7 @@ bottom of your pod, once filled with water you attempt
 to bring it up to the fire but its to heavy, the fire grows.
 You grab the bucket, fill it up put out the fire on the wall preventing
 access to the extinguisher.
-You can accesses the fire extinguisher.
+You can access the fire extinguisher.
             """)
             time.sleep(PRINT_DELAY_TIME * 4)
             fire_damage += 1
@@ -177,7 +176,7 @@ You can accesses the fire extinguisher.
 you lower the bucket down through a hatch in the
 bottom of your pod, once filled with water you
 pour it onto the fire putting it out
-You can accesses the fire extinguisher.
+You can access the fire extinguisher.
             """)
             time.sleep(PRINT_DELAY_TIME * 3)
             start_sequence_loop1 = False
@@ -185,24 +184,19 @@ You can accesses the fire extinguisher.
             start_sequence_loop1 = False
             restart(COUNT_DOWN_TIMER)
         else:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
 
     while start_sequence_loop2:
         print("you look towards the mini med bay and crafting station. Do you...")
         print("""
-[1] use the fire extinguisher on them, [2] or use the water bucket
+[1] use the fire extinguisher on them
+[2] use the water bucket
 [9] restart game
 """)
         try:
             option = int(input())
         except ValueError:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
             continue
 
         if option == 1:
@@ -233,13 +227,10 @@ in time and put the fire out
             restart(COUNT_DOWN_TIMER)
 
         else:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
     time.sleep(PRINT_DELAY_TIME * 2)
     print("you take a moment to calm and go take a look out the window or your emergency strand pod")
-    time.sleep(PRINT_DELAY_TIME * 2.456789)
+    time.sleep(PRINT_DELAY_TIME * 2.5)
     print("you find yourself in a gain ocean spanning for miles")
     time.sleep(PRINT_DELAY_TIME * 1.5)
     print('you check your planet scanner it reads "unknown planet"')
@@ -247,11 +238,11 @@ in time and put the fire out
     time.sleep(PRINT_DELAY_TIME * 1.5)
     print("the crashed star ship up north that brought you to this planet")
     time.sleep(PRINT_DELAY_TIME * 1.5)
-    print("heat vents to the east-high resource density")
+    print("heat vents to the east (high resource density)")
     time.sleep(PRINT_DELAY_TIME * 1.5)
-    print("caves to the west-high resource density")
+    print("caves to the west (high resource density)")
     time.sleep(PRINT_DELAY_TIME * 1.5)
-    print("cavern of unknown properties-south of the starting pod")
+    print("cavern of unknown properties to the south of the starting pod")
     time.sleep(PRINT_DELAY_TIME * 1.5)
 
     print("""
@@ -259,7 +250,7 @@ you pick up your mineral bag and empty tool pack
 and notice that your covered in an infection,
 a voice cries out from the south saying they can help you if you save them
 """)
-    time.sleep(PRINT_DELAY_TIME * 2.856789)
+    time.sleep(PRINT_DELAY_TIME * 3)
     start_pod()
 
 
@@ -286,10 +277,7 @@ what operation would you like to access:
         try:  # what pod operation you accesses
             option = int(input())
         except ValueError:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
             continue
 
         if option == 1:
@@ -332,10 +320,7 @@ what operation would you like to access:
                 try:
                     option = int(input())  # user inputs what item they want to craft
                 except ValueError:
-                    print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+                    print_error()
                     continue
 
                 if 0 < option < len(crafting_station) + 1:  # checks if the option input is a tool
@@ -363,10 +348,7 @@ what operation would you like to access:
                     restart(COUNT_DOWN_TIMER)
 
                 else:  # tells user they did not select a valid option
-                    print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+                    print_error()
         # -----------------------------------------------------------------------------------------------
 
         # plan travel:                    
@@ -388,10 +370,7 @@ where would you like to go:
                     option = int(input())
 
                 except ValueError:
-                    print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+                    print_error()
                     continue
 
                 if option == 1:
@@ -420,10 +399,7 @@ where would you like to go:
                     plan_travel_loop = False
 
                 else:
-                    print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+                    print_error()
         # --------------------------------------------------------------------
 
         elif option == 8:  # mineral_bag print
@@ -436,10 +412,7 @@ where would you like to go:
             pod_loop = False
 
         else:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
 
 
 def travel_sequence(place):  # value sent from where it called se as a var (place)
@@ -462,7 +435,7 @@ def caves_west():  # caves west of starting pod--------------------------------
     caves_loop = True
     print("""
 you arrive at calm looking area with some small tunnels just barely able to swim into
-you notice alot of these area have little shiny substences in them
+you notice a lot of these area have little shiny substances in them
 """)
     time.sleep(PRINT_DELAY_TIME * 1.5)
     while caves_loop:
@@ -477,10 +450,7 @@ you go up to a tunnel upon close inspection you see a suspicious rock in the tun
             option = int(input())
 
         except ValueError:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
             continue
         if option == 1:
             if not crafting_station[4][CRAFTED]:  # checks if you made the rock_processor by going into the list and check the values in the dict for index 4 which is th rock processor
@@ -521,10 +491,7 @@ you go up to a tunnel upon close inspection you see a suspicious rock in the tun
             restart(COUNT_DOWN_TIMER)
 
         else:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
 
 
 def heat_vents_east():  # vents east of starting pod--------------------------------
@@ -543,10 +510,7 @@ you go up to a heat vent and upon close inspection you see a the hot rock need a
             option = int(input())
 
         except ValueError:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
             continue
         if option == 1:
             if not crafting_station[4][CRAFTED]:  # checks if you made the rock_processor if not asks whether the following argument is true or false
@@ -588,10 +552,7 @@ you go up to a heat vent and upon close inspection you see a the hot rock need a
             restart(COUNT_DOWN_TIMER)
 
         else:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
 
 
 def crashed_ship_north():  # crashed ship north of starting pod--------------------------------
@@ -630,10 +591,7 @@ stuck to the walls
             option = int(input())
 
         except ValueError:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
             continue
         if option == 1:
             if not crafting_station[1][CRAFTED]:  # checks if you made the rock_processor
@@ -666,10 +624,7 @@ stuck to the walls
             break
 
         else:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
 
 
 def ghost_river_south():  # "cavern of unknown properties" later to be found as ghost river south of starting pod--------------------------------
@@ -727,10 +682,7 @@ END OF SUBNAUTICA BELOW GRAPHICS
             option = int(input())
 
         except ValueError:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
 
         if option == 1:
             glowing_cavern_loop = False
@@ -740,10 +692,7 @@ END OF SUBNAUTICA BELOW GRAPHICS
             quit()
 
         else:
-            print("""
-    INPUT ERROR!! Please try again
-    type desired option or input corresponding number:
-""")
+            print_error()
 
 
 # main routine
